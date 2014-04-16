@@ -14,7 +14,7 @@ public class World {
 	private int width;
 
 	private int height;
-	
+
 	private Ship ship;
 
 	public World(int width, int height) {
@@ -48,9 +48,9 @@ public class World {
 				image.setRGB(x, y, getColor(f).getRGB());
 			}
 		}
-		
+
 		image.setRGB(ship.getCoords().getX(), ship.getCoords().getY(), Color.MAGENTA.getRGB());
-		
+
 		File f = new File(filename);
 		try {
 			String ext = filename.substring(filename.length()-3);
@@ -58,7 +58,7 @@ public class World {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private Color getColor(Field field) {
@@ -75,7 +75,7 @@ public class World {
 	}
 
 	public void start() {
-		
+
 		for (int i = 0; i < 1000; i++){
 //		while (ship.isAlive()){
 			ship.navidate(new EnvironementData(
@@ -112,8 +112,8 @@ public class World {
 		System.out.println(ship.getCoords().getX() + " " + ship.getCoords().getY());
 	}
 
-	
-	
+
+
 	private int getNorthSersorData(Coordinates coords){
 		int i = 0;
 		while (fields[coords.getX()][coords.getY() - i].getType() == FieldType.SPACE){i++;}
@@ -125,18 +125,18 @@ public class World {
 		while (fields[coords.getX() + i][coords.getY()].getType() == FieldType.SPACE){i++;}
 		return i;
 	}
-	
+
 	private int getSouthSersorData(Coordinates coords){
 		int i = 0;
-		while (fields[coords.getX() + i][coords.getY()].getType() == FieldType.SPACE){i++;}
+		while (fields[coords.getX()][coords.getY() + i].getType() == FieldType.SPACE){i++;}
 		return i;
 	}
-	
+
 	private int getWestSersorData(Coordinates coords){
 		int i = 0;
 		while (fields[coords.getX() - i][coords.getY()].getType() == FieldType.SPACE){i++;}
 		return i;
 	}
 
-	
+
 }
