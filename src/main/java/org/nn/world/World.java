@@ -76,7 +76,8 @@ public class World {
 
 	public void start() {
 		
-		while (ship.isAlive()){
+		for (int i = 0; i < 1000; i++){
+//		while (ship.isAlive()){
 			ship.navidate(new EnvironementData(
 					getNorthSersorData(ship.getCoords()),
 					getEstSersorData(ship.getCoords()),
@@ -84,8 +85,6 @@ public class World {
 					getWestSersorData(ship.getCoords())));
 			moveShip();
 			checkShip();
-			save("snapshot.png");
-			
 		}
 	}
 
@@ -97,16 +96,16 @@ public class World {
 	private void moveShip(){
 		switch (ship.getDirection()) {
 		case NORTH:
-			ship.getCoords().setX(ship.getCoords().getX() - 1);
+			ship.getCoords().setY(ship.getCoords().getY() - 1);
 			break;
 		case EST:
-			ship.getCoords().setY(ship.getCoords().getY() + 1);
-			break;
-		case SOUTH:
 			ship.getCoords().setX(ship.getCoords().getX() + 1);
 			break;
+		case SOUTH:
+			ship.getCoords().setY(ship.getCoords().getY() + 1);
+			break;
 		case WEST:
-			ship.getCoords().setY(ship.getCoords().getY() - 1);
+			ship.getCoords().setX(ship.getCoords().getX() - 1);
 			break;
 		}
 		fields[ship.getCoords().getX()][ship.getCoords().getY()].setVisited(true);
@@ -117,13 +116,13 @@ public class World {
 	
 	private int getNorthSersorData(Coordinates coords){
 		int i = 0;
-		while (fields[coords.getX() - i][coords.getY()].getType() == FieldType.SPACE){i++;}
+		while (fields[coords.getX()][coords.getY() - i].getType() == FieldType.SPACE){i++;}
 		return i;
 	}
 
 	private int getEstSersorData(Coordinates coords){
 		int i = 0;
-		while (fields[coords.getX()][coords.getY() + i].getType() == FieldType.SPACE){i++;}
+		while (fields[coords.getX() + i][coords.getY()].getType() == FieldType.SPACE){i++;}
 		return i;
 	}
 	
@@ -135,7 +134,7 @@ public class World {
 	
 	private int getWestSersorData(Coordinates coords){
 		int i = 0;
-		while (fields[coords.getX()][coords.getY() - i].getType() == FieldType.SPACE){i++;}
+		while (fields[coords.getX() - i][coords.getY()].getType() == FieldType.SPACE){i++;}
 		return i;
 	}
 
