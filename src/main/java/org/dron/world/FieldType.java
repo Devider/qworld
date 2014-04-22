@@ -1,4 +1,4 @@
-package org.nn.world;
+package org.dron.world;
 
 public enum FieldType {
 	SPACE, WALL
