@@ -20,20 +20,20 @@ public class NavPanel extends JPanel implements ActionListener {
 
 	public static final int WIDTH = 100;
 	public static final int HEIGHT = 100;
-	
+
 	private MovementActionListener listener = null;
-	
+
 	private JButton forward = new JButton("^");
 	private JButton rollLeft = new JButton("<-");
 	private JButton rollRight = new JButton("->");
 	private JButton strafeLeft = new JButton("<<");
 	private JButton strafeRight = new JButton(">>");
-	
+
 	public NavPanel(MainPanel mainPanel){
 		setSize(WIDTH, HEIGHT);
 		setLayout(new  BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(new LineBorder(Color.gray));
-		
+
 		addAll(forward);
 		addAll(rollLeft, rollRight);
 		addAll(strafeLeft, strafeRight);
@@ -43,7 +43,7 @@ public class NavPanel extends JPanel implements ActionListener {
 		strafeLeft.addActionListener(this);
 		strafeRight.addActionListener(this);
 	}
-	
+
 	private void addAll(JComponent...components){
 		JPanel p = new JPanel();
 		for( JComponent c : components){
@@ -51,7 +51,7 @@ public class NavPanel extends JPanel implements ActionListener {
 		}
 		add(p);
 	}
-	
+
 	public boolean getDesision() {
 		return false;
 	}
@@ -60,15 +60,15 @@ public class NavPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Movement movement = null;
 		if ("^".equals(e.getActionCommand())) {
-			movement = new Movement(10, 0, 0);
+			movement = new Movement(Movement.STEP, 0, 0);
 		} else if ("<-".equals(e.getActionCommand())) {
 			movement = new Movement(0, 0, -90);
 		} else if ("<<".equals(e.getActionCommand())) {
-			movement = new Movement(0, -10, 0);
+			movement = new Movement(0, Movement.STEP * -1, 0);
 		} else if ("->".equals(e.getActionCommand())) {
 			movement = new Movement(0, 0, 90);
 		} else if (">>".equals(e.getActionCommand())) {
-			movement = new Movement(0, 10, 0);
+			movement = new Movement(0, Movement.STEP, 0);
 		}
 		if (listener != null){
 			listener.actionPerformed(new MovementActionEvent(movement));
@@ -86,6 +86,6 @@ public class NavPanel extends JPanel implements ActionListener {
 		strafeLeft.setEnabled(false);
 		strafeRight.setEnabled(false);
 	}
-	
-	
+
+
 }

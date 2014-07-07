@@ -15,7 +15,7 @@ public class Ship {
     private World environement;
     private Sonar[] sonars;
     public static final int RADIUS = 10;
-    private static int[] sonarsAngles = 
+    private static int[] sonarsAngles =
     	{360 - 110, 360 - 70, 360 - 20, 0, 20, 70, 110};
 
     public Ship(Point point, Integer directionAngle, World environement) {
@@ -70,26 +70,26 @@ public class Ship {
         for (int i = 0; i < sonars.length; i++) {
 			sonars[i].draw(image);
 		}
-        
+
     }
-    
+
     public Sonar[] getSonars() {
 		return sonars;
 	}
-    
+
     public static int getSonarCount(){
     	return sonarsAngles.length;
     }
-    
+
     public class Sonar {
-    	
-    	private final int MAX_LENGHT = 200;
+
+    	private final int MAX_LENGHT = 45;
     	private int angle;
-    	
+
     	public Sonar(int angle){
     		this.angle = angle;
     	}
-    	
+
     	public Point getReflectionPoint(){
 			int direction = TrigUtils.concat(directionAngle, angle);
 			for (int i = 0; i < MAX_LENGHT; i++){
@@ -101,7 +101,7 @@ public class Ship {
 			}
 			return null;
     	}
-    	
+
     	private Point getSensorPoint(int angle){
     		int direction = TrigUtils.concat(directionAngle, angle);
 			double x = location.getX() + RADIUS * Math.cos(direction * Math.PI / 180);
@@ -120,7 +120,7 @@ public class Ship {
 		public int getAngle() {
 			return angle;
 		}
-		
+
 		public void draw(BufferedImage image){
 			Point reflectionPoint = getReflectionPoint();
 			Graphics g = image.getGraphics();
@@ -138,6 +138,6 @@ public class Ship {
 			g.dispose();
 		}
 
-    	
+
     }
 }

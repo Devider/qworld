@@ -36,7 +36,7 @@ public class NeuronNetworkDataPanel extends JPanel {
 	private JButton saveButton = new JButton("Save");
 	private JButton loadButton = new JButton("Load");
 	private JComboBox<Integer> teachingDeep = new JComboBox<Integer>();
-	private JTextField teachingCount = new JTextField("100000", 8);
+	private JTextField teachingCount = new JTextField("500000", 8);
 	private JProgressBar progress = new JProgressBar(0, 100);
 	private JButton testButton = new JButton("Test");
 	private MovesDataProvider provider = null;
@@ -52,15 +52,15 @@ public class NeuronNetworkDataPanel extends JPanel {
 	public NeuronNetworkDataPanel() {
 		setBorder(new LineBorder(Color.gray));
 		setMinimumSize(new Dimension(100, 500));
-		
+
 		initControls();
-		
+
 		initNN();
 	}
 
 	private void initNN() {
 		int deep = teachingDeep.getItemAt(teachingDeep.getSelectedIndex());
-		student = new BNetwork(new BNeuronFactory(ActivationFunctions.SIGMOIDAL), 
+		student = new BNetwork(new BNeuronFactory(ActivationFunctions.SIGMOIDAL),
 				RowsData.SENSORS_COLUMNS * deep, 15, 15, 5);
 	}
 
@@ -71,7 +71,7 @@ public class NeuronNetworkDataPanel extends JPanel {
 		progress.invalidate();
 		progress.repaint();
 	}
-	
+
 	public void setTestStudentListener(TestStudentActionListener listener) {
 		this.listener = listener;
 	}
@@ -88,15 +88,15 @@ public class NeuronNetworkDataPanel extends JPanel {
 		teachingDeep.setSelectedIndex(1);
 		panel0.add(teachingDeep);
 		add(panel0);
-		
+
 		//add(new HiddenLayersPanel());
-		
+
 		JPanel panel3 = new JPanel();
 		JLabel label3 = new JLabel("Циклов обучения: ");
 		panel3.add(label3);
 		panel3.add(teachingCount);
 		add(panel3);
-		
+
 		JPanel panel4 = new JPanel();
 		panel4.add(teachButton);
 		panel4.add(saveButton);
@@ -108,7 +108,7 @@ public class NeuronNetworkDataPanel extends JPanel {
 		JPanel panel6 = new JPanel();
 		panel6.add(testButton);
 		add(panel6);
-		
+
 		teachButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -132,9 +132,9 @@ public class NeuronNetworkDataPanel extends JPanel {
 				activityMonitor.start();
 			}
 		});
-		
+
 		saveButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
@@ -150,9 +150,9 @@ public class NeuronNetworkDataPanel extends JPanel {
 				}
 			}
 		});
-		
+
 		loadButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
@@ -168,24 +168,24 @@ public class NeuronNetworkDataPanel extends JPanel {
 				}
 			}
 		});
-		
+
 		testButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (listener != null)
 					listener.actionPerformed(new TestStudentActionEvent(student));
 			}
 		});
-		
+
 		teachingDeep.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				initNN();
 				System.out.println();
 			}
 		});
-		
+
 	}
 }

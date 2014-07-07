@@ -1,10 +1,13 @@
 package org.dron.world;
 
 public class Movement {
+
+	public static final int STEP = 20;
+
 	private int forward;
 	private int roll;
 	private int yaw;
-	
+
 	public int getForward() {
 		return forward;
 	}

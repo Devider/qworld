@@ -23,9 +23,9 @@ public class World {
 		fields = new Field[width][height];
 		this.width = width;
 		this.height = height;
-		ship = new Ship(new Point(100, 60), 0, this);
+		ship = new Ship(new Point(30, 120), -90, this);
 	}
-	
+
 	public static World load(String file){
 		BufferedImage image;
 		try {
@@ -137,7 +137,7 @@ public class World {
     public Ship getShip() {
         return ship;
     }
-    
+
     public void moveShip(Movement data) throws CrashException{
     	ship.doPitch(data.getForward());
     	ship.doRoll(data.getRoll());

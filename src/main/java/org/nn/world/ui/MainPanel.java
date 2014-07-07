@@ -24,7 +24,7 @@ import org.nn.world.ui.event.TestStudentActionListener;
 public class MainPanel extends JFrame implements MovementActionListener,TestStudentActionListener{
 
 	private static final long serialVersionUID = 8306859277454164557L;
-	
+
 	private final static String WORLD_FILE = "world.jpg";
 
 	private final WorldPanel worldPanel = new WorldPanel();
@@ -36,7 +36,7 @@ public class MainPanel extends JFrame implements MovementActionListener,TestStud
 
 	public MainPanel() {
 		setTitle("MainPanel");
-		
+
 		navigationPanel.setMovementActionListener(this);
 		nnPanel.addMovesDataProvider(movesPanel);
 		nnPanel.setTestStudentListener(this);
@@ -69,6 +69,18 @@ public class MainPanel extends JFrame implements MovementActionListener,TestStud
 
 	@Override
 	public void actionPerformed(MovementActionEvent e) {
+
+		Sonar[] sonars = world.getShip().getSonars();
+		int[] data = new int[RowsData.COLUMNS_COUNT];
+		for (int i = 0; i < sonars.length; i++){
+			data[i] = sonars[i].getDistance();
+		}
+
+		data[RowsData.SENSORS_COLUMNS] = e.getMovement().getForward();
+		data[RowsData.SENSORS_COLUMNS + 1] = e.getMovement().getRoll();
+		data[RowsData.SENSORS_COLUMNS + 2] = e.getMovement().getYaw();
+
+		movesPanel.addSensorsData(new RowsData(data));
 		try{
 			world.moveShip(e.getMovement());
 		} catch (CrashException ex) {
@@ -77,28 +89,16 @@ public class MainPanel extends JFrame implements MovementActionListener,TestStud
 			return;
 		}
 		worldPanel.setImage(world.toImage());
-		
-		Sonar[] sonars = world.getShip().getSonars();
-		int[] data = new int[RowsData.COLUMNS_COUNT];
-		for (int i = 0; i < sonars.length; i++){
-			data[i] = sonars[i].getDistance();
-		}
-		
-		data[RowsData.SENSORS_COLUMNS] = e.getMovement().getForward();
-		data[RowsData.SENSORS_COLUMNS + 1] = e.getMovement().getRoll();
-		data[RowsData.SENSORS_COLUMNS + 2] = e.getMovement().getYaw();
-		
-		movesPanel.addSensorsData(new RowsData(data));
 	}
-	
+
 	private Timer timer = null;
 
 	@Override
 	public void actionPerformed(TestStudentActionEvent e) {
 		BNetwork pilot = e.getStudent();
 		tester = new NetworkTester(world, pilot, WORLD_FILE);
-		timer = new Timer(1000, new ActionListener() {
-			
+		timer = new Timer(100, new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Movement mov = tester.doIteration();

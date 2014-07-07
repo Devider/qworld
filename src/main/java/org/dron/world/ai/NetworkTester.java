@@ -3,6 +3,7 @@ package org.dron.world.ai;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import nn.networks.nonlinear.backpropogation.BNetwork;
 
@@ -14,20 +15,20 @@ import org.dron.world.Ship.Sonar;
 import org.dron.world.World;
 
 public class NetworkTester {
-	
+
 	private final BNetwork pilot;
 	private final World world;
 	private int historyDeep;
 	private List<SonarData> history = new ArrayList<>();
 
-	
+
 	public NetworkTester(World world, BNetwork pilot, String worldImage){
 		this.pilot = pilot;
 		historyDeep = pilot.getNeuronCountAt(0) / Ship.getSonarCount();
 		this.world = world;
-		
+
 	}
-	
+
 	public Movement doIteration(){
 		Sonar[] sonars = world.getShip().getSonars();
 		int[] data = new int[RowsData.SENSORS_COLUMNS];
@@ -36,14 +37,14 @@ public class NetworkTester {
 		}
 		history.add(new SonarData(data));
 		double[] test = MathUtils.normalize(prepareData());
-		
+
 		double[] desision = pilot.test(test);
-		
+
 		System.out.println(Arrays.toString(MathUtils.round(test)));
 		System.out.println(Arrays.toString(
 				MathUtils.round(desision))
 				);
-		
+
 		return interpretOutputs(desision);
 	}
 
@@ -62,25 +63,27 @@ public class NetworkTester {
 		}
 		return toDouble(result);
 	}
-	
+
 	private double[] toDouble(int[] vals){
 		double[] result = new double[vals.length];
 		for (int i= 0; i < vals.length; i++)
 			result[i] = vals[i];
 		return result;
 	}
-	
+
 	private final InterpreterStrategy WTAStrategy = new InterpreterStrategy() {
-		
+
+		private Random r = new Random();
 		@Override
 		public Movement interpret(double[] data) {
+//			int error = r.nextInt(4) - 2;
 			int index = getMaxIndex(data);
 			if (index == 0){
 				return new Movement(10, 0, 0);
 			} else if (index == 1){
-				return new Movement(0, 0, 90);
+				return new Movement(0, 0, 90 /* + error*/ );
 			} else if (index == 2){
-				return new Movement(0, 0, -90);
+				return new Movement(0, 0, -90 /* + error*/ );
 			} else if (index == 3){
 				return new Movement(0, 10, 0);
 			} else if (index == 4){
