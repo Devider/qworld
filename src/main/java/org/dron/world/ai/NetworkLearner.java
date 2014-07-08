@@ -12,12 +12,17 @@ import org.dron.world.Ship;
 import org.nn.world.ui.MovementExample;
 
 public class NetworkLearner extends Thread{
-	
+
 	private int persents;
-	private BNetwork student; 
+	private BNetwork student;
 	private List<MovementExample> list;
 	private int deep;
 	private int count;
+
+	public static final int TURN_LEFT = 0;
+	public static final int TURN_RIGHT = 1;
+	private int lastTurn = 0;
+
 
 	public int getPersents() {
 		return persents;
@@ -29,10 +34,10 @@ public class NetworkLearner extends Thread{
 		this.list = list;
 		this.deep = deep;
 	}
-	
+
 	private double[] concat(int number, int deep, List<MovementExample> data){
 		int sensorsCount = Ship.getSonarCount();
-		double[] result = new double[sensorsCount * deep];
+		double[] result = new double[sensorsCount * deep + 1];
 		if (number < deep)
 			throw new IllegalArgumentException("number < deep");
 		for (int i = 0; i < deep; i++ ) {
@@ -41,7 +46,7 @@ public class NetworkLearner extends Thread{
 		}
 		return result;
 	}
-	
+
 	@Override
 	public void run() {
 		Random randomizer = new Random();
@@ -49,12 +54,12 @@ public class NetworkLearner extends Thread{
 			JOptionPane.showMessageDialog(null, "Недостаточно данных для обучения", "Полетайте немного", JOptionPane.OK_OPTION);
 			return;
 		}
-		
+
 		for (int i = 0; i < count; i++){
 			int rand = randomizer.nextInt(list.size() - deep) + deep;
 			double[] teachData = concat(rand, deep, list);
 			student.teach(
-					MathUtils.normalize(teachData), 
+					MathUtils.normalize(teachData),
 					list.get(rand).getUserDesision());
 			if (i % 100 == 0){
 				persents = (int)(i * 1.0F / count * 100);
@@ -62,5 +67,4 @@ public class NetworkLearner extends Thread{
 		}
 		persents = 100;
 	}
-
 }

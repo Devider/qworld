@@ -4,9 +4,9 @@ import org.dron.world.Movement;
 
 
 public class MovementActionEvent {
-	
+
 	private Movement movement;
-	
+
 	public MovementActionEvent(Movement m){
 		this.movement = m;
 	}
@@ -14,5 +14,4 @@ public class MovementActionEvent {
 	public Movement getMovement() {
 		return movement;
 	}
-
 }

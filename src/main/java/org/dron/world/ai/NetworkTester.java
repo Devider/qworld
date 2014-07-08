@@ -3,7 +3,6 @@ package org.dron.world.ai;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import nn.networks.nonlinear.backpropogation.BNetwork;
 
@@ -73,7 +72,7 @@ public class NetworkTester {
 
 	private final InterpreterStrategy WTAStrategy = new InterpreterStrategy() {
 
-		private Random r = new Random();
+//		private Random r = new Random();
 		@Override
 		public Movement interpret(double[] data) {
 //			int error = r.nextInt(4) - 2;

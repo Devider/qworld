@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import org.dron.world.Movement;
+import org.nn.world.ui.event.ControlActionEvent;
+import org.nn.world.ui.event.ControlActionListener;
 import org.nn.world.ui.event.MovementActionEvent;
 import org.nn.world.ui.event.MovementActionListener;
 
@@ -21,15 +23,18 @@ public class NavPanel extends JPanel implements ActionListener {
 	public static final int WIDTH = 100;
 	public static final int HEIGHT = 100;
 
-	private MovementActionListener listener = null;
+	private MovementActionListener movementListener = null;
+	private ControlActionListener controlListener = null;
 
 	private JButton forward = new JButton("^");
 	private JButton rollLeft = new JButton("<-");
 	private JButton rollRight = new JButton("->");
 	private JButton strafeLeft = new JButton("<<");
 	private JButton strafeRight = new JButton(">>");
+	private JButton undo = new JButton("Undo");
+	private JButton reset = new JButton("Reset");
 
-	public NavPanel(MainPanel mainPanel){
+	public NavPanel(MainFrame mainPanel){
 		setSize(WIDTH, HEIGHT);
 		setLayout(new  BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(new LineBorder(Color.gray));
@@ -37,11 +42,14 @@ public class NavPanel extends JPanel implements ActionListener {
 		addAll(forward);
 		addAll(rollLeft, rollRight);
 		addAll(strafeLeft, strafeRight);
+		addAll(undo, reset);
 		forward.addActionListener(this);
 		rollLeft.addActionListener(this);
 		rollRight.addActionListener(this);
 		strafeLeft.addActionListener(this);
 		strafeRight.addActionListener(this);
+		undo.addActionListener(this);
+		reset.addActionListener(this);
 	}
 
 	private void addAll(JComponent...components){
@@ -69,14 +77,25 @@ public class NavPanel extends JPanel implements ActionListener {
 			movement = new Movement(0, 0, 90);
 		} else if (">>".equals(e.getActionCommand())) {
 			movement = new Movement(0, Movement.STEP, 0);
+		} else if ("Undo".equals(e.getActionCommand())) {
+			movement = Movement.back();
+		} else if ("Reset".equals(e.getActionCommand())) {
+			if (controlListener != null){
+				controlListener.actionPerformed(new ControlActionEvent(ControlActionEvent.ActionType.RESET));
+			}
+			return;
 		}
-		if (listener != null){
-			listener.actionPerformed(new MovementActionEvent(movement));
+		if (movementListener != null){
+			movementListener.actionPerformed(new MovementActionEvent(movement));
 		}
 	}
 
 	public void setMovementActionListener(MovementActionListener listener) {
-		this.listener = listener;
+		this.movementListener = listener;
+	}
+
+	public void setControlActionListener(ControlActionListener listener) {
+		this.controlListener = listener;
 	}
 
 	public void hold() {
@@ -85,6 +104,14 @@ public class NavPanel extends JPanel implements ActionListener {
 		rollRight.setEnabled(false);
 		strafeLeft.setEnabled(false);
 		strafeRight.setEnabled(false);
+	}
+
+	public void unhold() {
+		forward.setEnabled(true);
+		rollLeft.setEnabled(true);
+		rollRight.setEnabled(true);
+		strafeLeft.setEnabled(true);
+		strafeRight.setEnabled(true);
 	}
 
 
