@@ -143,6 +143,7 @@ public class MainFrame extends JFrame implements MovementActionListener,TestStud
 
 	@Override
 	public void actionPerformed(ControlActionEvent e) {
+		timer.stop();
 		MainFrame frame = new MainFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainFrame.this.setVisible(false);

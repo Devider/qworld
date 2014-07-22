@@ -37,7 +37,7 @@ public class NetworkLearner extends Thread{
 
 	private double[] concat(int number, int deep, List<MovementExample> data){
 		int sensorsCount = Ship.getSonarCount();
-		double[] result = new double[sensorsCount * deep + 1];
+		double[] result = new double[sensorsCount * deep];
 		if (number < deep)
 			throw new IllegalArgumentException("number < deep");
 		for (int i = 0; i < deep; i++ ) {
