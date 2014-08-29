@@ -34,7 +34,7 @@ public class MainFrame extends JFrame implements MovementActionListener,TestStud
 	private World world;
 	private NeuronNetworkDataPanel nnPanel;
 	private MovesPanel movesPanel;
-	private NavPanel navigationPanel;
+	private AdaptiveNavPanel navigationPanel;
 	private NetworkTester tester;
 	private Timer timer;
 
@@ -49,7 +49,7 @@ public class MainFrame extends JFrame implements MovementActionListener,TestStud
 		world = World.load(WORLD_FILE);
 		nnPanel = new NeuronNetworkDataPanel();
 		movesPanel = new MovesPanel();
-		navigationPanel = new NavPanel(this);
+		navigationPanel = new AdaptiveNavPanel(this);
 
 		navigationPanel.setMovementActionListener(this);
 		navigationPanel.setControlActionListener(this);
@@ -68,7 +68,7 @@ public class MainFrame extends JFrame implements MovementActionListener,TestStud
 		JSplitPane outerPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				innerPane1, innerPane2);
 
-		setSize(1000, 700);
+		setSize(1000, 800);
 
 		add(outerPane);
 	}
@@ -143,7 +143,8 @@ public class MainFrame extends JFrame implements MovementActionListener,TestStud
 
 	@Override
 	public void actionPerformed(ControlActionEvent e) {
-		timer.stop();
+		if (timer != null)
+			timer.stop();
 		MainFrame frame = new MainFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainFrame.this.setVisible(false);
