@@ -25,18 +25,10 @@ public class MovementExample {
 		for (int i = 0; i < RowsData.SENSORS_COLUMNS; result.sensors[i] = data
 				.getAt(i++))
 			;
-		result.userDesision = new double[5];
-		if (data.getAt(RowsData.SENSORS_COLUMNS) > 0) {
-			result.userDesision[0] = 1; // ^
-		} else if (data.getAt(RowsData.SENSORS_COLUMNS + 1) > 0) {
-			result.userDesision[3] = 1; // >>
-		} else if (data.getAt(RowsData.SENSORS_COLUMNS + 1) < 0) {
-			result.userDesision[4] = 1; // <<
-		} else if (data.getAt(RowsData.SENSORS_COLUMNS + 2) > 0){
-			result.userDesision[1] = 1; // ->
-		} else if (data.getAt(RowsData.SENSORS_COLUMNS + 2) < 0){
-			result.userDesision[2] = 1; // <-
-		}
+		result.userDesision = new double[3];
+		result.userDesision[0] = data.getAt(RowsData.SENSORS_COLUMNS + 0);
+		result.userDesision[1] = data.getAt(RowsData.SENSORS_COLUMNS + 1);
+		result.userDesision[2] = data.getAt(RowsData.SENSORS_COLUMNS + 2);
 		return result;
 	}
 

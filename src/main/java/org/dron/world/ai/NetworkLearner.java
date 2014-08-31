@@ -21,7 +21,6 @@ public class NetworkLearner extends Thread{
 
 	public static final int TURN_LEFT = 0;
 	public static final int TURN_RIGHT = 1;
-	private int lastTurn = 0;
 
 
 	public int getPersents() {
@@ -41,7 +40,7 @@ public class NetworkLearner extends Thread{
 		if (number < deep)
 			throw new IllegalArgumentException("number < deep");
 		for (int i = 0; i < deep; i++ ) {
-			System.arraycopy(data.get(number - i).getSensors(), 0,
+			System.arraycopy(data.get(number - i).getSensors(), 0, 
 					result, sensorsCount * i, sensorsCount);
 		}
 		return result;
@@ -59,7 +58,8 @@ public class NetworkLearner extends Thread{
 			int rand = randomizer.nextInt(list.size() - deep) + deep;
 			double[] teachData = concat(rand, deep, list);
 			student.teach(
-					MathUtils.normalize(teachData),
+					//MathUtils.normalize(teachData),
+					teachData,
 					list.get(rand).getUserDesision());
 			if (i % 100 == 0){
 				persents = (int)(i * 1.0F / count * 100);

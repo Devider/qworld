@@ -83,7 +83,7 @@ public class Ship {
 
     public class Sonar {
 
-    	private final int MAX_LENGHT = 45;
+    	private final int MAX_LENGHT = 90;
     	private int angle;
 
     	public Sonar(int angle){

@@ -60,8 +60,8 @@ public class NeuronNetworkDataPanel extends JPanel {
 
 	private void initNN() {
 		int deep = teachingDeep.getItemAt(teachingDeep.getSelectedIndex());
-		student = new BNetwork(new BNeuronFactory(ActivationFunctions.SIGMOIDAL),
-				RowsData.SENSORS_COLUMNS * deep, 15, 15, 5);
+		student = new BNetwork(new BNeuronFactory(ActivationFunctions.TANH),
+				RowsData.SENSORS_COLUMNS * deep, 15, 15, 3);
 	}
 
 	private void updateProgressBar(float percents) {
@@ -85,7 +85,7 @@ public class NeuronNetworkDataPanel extends JPanel {
 		teachingDeep.addItem(1);
 		teachingDeep.addItem(2);
 		teachingDeep.addItem(3);
-		teachingDeep.setSelectedIndex(1);
+		teachingDeep.setSelectedIndex(0);
 		panel0.add(teachingDeep);
 		add(panel0);
 

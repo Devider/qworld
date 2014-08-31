@@ -30,9 +30,4 @@ public class MovesTableModel extends AbstractTableModel{
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		return data.get(rowIndex).getAt(columnIndex);
 	}
-	
-	@Override
-	public String getColumnName(int column) {
-		return RowsData.COLUMNS[column];
-	}
 }

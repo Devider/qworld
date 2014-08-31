@@ -2,13 +2,11 @@ package org.dron.world;
 
 public class RowsData{
 
-	public static int SENSORS_COLUMNS = 7;
+	public static final int SENSORS_COLUMNS = Ship.getSonarCount();
 
-	public static int MOVES_COLUMNS = 3;
+	public static final int MOVES_COLUMNS = 3;
 
 	public static final int COLUMNS_COUNT = SENSORS_COLUMNS + MOVES_COLUMNS;
-
-	public static final String[] COLUMNS = {"IIX", "X", "XI", "XII", "I", "II", "IV", "MOV", "ROLL", "YAW"};
 
 	private int[] sensors = new int[COLUMNS_COUNT];
 

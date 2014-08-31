@@ -35,20 +35,18 @@ public class NetworkTester {
 			data[i] = sonars[i].getDistance();
 		}
 		history.add(new SonarData(data));
-		double[] test = MathUtils.normalize(prepareData());
+		double[] test = prepareData();
 
 		double[] desision = pilot.test(test);
 
-		System.out.println(Arrays.toString(MathUtils.round(test)));
-		System.out.println(Arrays.toString(
-				MathUtils.round(desision))
-				);
+		System.out.println(Arrays.toString(test));
+		System.out.println(Arrays.toString(desision));
 
 		return interpretOutputs(desision);
 	}
 
 	private Movement interpretOutputs(double[] desision) {
-		return WTAStrategy.interpret(desision);
+		return AdaptiveStrategy.interpret(desision);
 	}
 
 	private double[] prepareData() {
@@ -72,10 +70,8 @@ public class NetworkTester {
 
 	private final InterpreterStrategy WTAStrategy = new InterpreterStrategy() {
 
-//		private Random r = new Random();
 		@Override
 		public Movement interpret(double[] data) {
-//			int error = r.nextInt(4) - 2;
 			int index = getMaxIndex(data);
 			if (index == 0){
 				return new Movement(10, 0, 0);
@@ -91,5 +87,10 @@ public class NetworkTester {
 			throw new RuntimeException("Somethimg wrong...");
 		}
 	};
-
+	
+	private final InterpreterStrategy AdaptiveStrategy = new InterpreterStrategy() {
+		public Movement interpret(double[] data) {
+			return new Movement((int)(data[0] * 10), (int)(data[1] * 10), (int)(data[2] * 10));
+		};
+	};
 }
