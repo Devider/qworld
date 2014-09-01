@@ -37,7 +37,9 @@ public class NetworkTester {
 		history.add(new SonarData(data));
 		double[] test = prepareData();
 
-		double[] desision = pilot.test(test);
+		double[] desision = pilot.test(
+				MathUtils.normalizeSonar(test)
+				);
 
 		System.out.println(Arrays.toString(test));
 		System.out.println(Arrays.toString(desision));
@@ -87,7 +89,7 @@ public class NetworkTester {
 			throw new RuntimeException("Somethimg wrong...");
 		}
 	};
-	
+
 	private final InterpreterStrategy AdaptiveStrategy = new InterpreterStrategy() {
 		public Movement interpret(double[] data) {
 			return new Movement((int)(data[0] * 10), (int)(data[1] * 10), (int)(data[2] * 10));
