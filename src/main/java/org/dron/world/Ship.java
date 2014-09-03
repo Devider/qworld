@@ -18,7 +18,7 @@ public class Ship {
     private Sonar[] sonars;
     public static final int RADIUS = 10;
     private static int[] sonarsAngles =
-    	{360 - 110, 360 - 70, 360 - 20, 0, 20, 70, 110};
+    	{-30, -60, -90, -120, 0, 30, 60, 90, 120};
 
     public Ship(Point point, Integer directionAngle, World environement) {
         this.location = point;
