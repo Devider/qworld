@@ -5,7 +5,7 @@ import org.dron.world.Point;
 
 public class TrigUtils {
 	public static int concat(int angle1, int angle2){
-        return (angle1 + angle2) % 360;
+        return (int)(angle1 + angle2 + 0.5) % 360;
 	}
 	
 	public static int distance (Point p1, Point p2){

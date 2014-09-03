@@ -3,6 +3,11 @@ package org.dron.world;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.dron.common.TrigUtils;
 
@@ -36,16 +41,16 @@ public class Ship {
         double x = pitch * Math.cos(directionAngle * Math.PI / 180);
         double y = pitch * Math.sin(directionAngle * Math.PI / 180);
 
-        location.setX(location.getX() + (int) x);
-        location.setY(location.getY() + (int) y);
+        location.setX((int)(location.getX() + x + .5));
+        location.setY((int)(location.getY() + y + .5));
     }
 
     public void doRoll(int roll) {
         double x = roll * Math.cos((directionAngle + 90) * Math.PI / 180);
         double y = roll * Math.sin((directionAngle + 90) * Math.PI / 180);
 
-        location.setX(location.getX() + (int) x);
-        location.setY(location.getY() + (int) y);
+        location.setX((int)(location.getX() + x + .5));
+        location.setY((int)(location.getY() + y + .5));
     }
 
     public void doYaw(int yaw) {
@@ -63,13 +68,18 @@ public class Ship {
      */
     public void draw(BufferedImage image) {
         Point startPiont = new Point(location.getX() - RADIUS, location.getY() - RADIUS);
-        Graphics graphics = image.getGraphics();
-        graphics.setColor(Color.BLUE);
-        graphics.fillOval(startPiont.getX(), startPiont.getY(), RADIUS*2, RADIUS*2);
-        graphics.dispose();
         for (int i = 0; i < sonars.length; i++) {
 			sonars[i].draw(image);
 		}
+        Graphics graphics = image.getGraphics();
+        graphics.setColor(Color.BLUE);
+        graphics.fillOval(startPiont.getX(), startPiont.getY(), RADIUS*2, RADIUS*2);
+        // нос
+        double x = getLocation().getX() + RADIUS * Math.cos(directionAngle * Math.PI / 180) * 2;
+        double y = getLocation().getY() + RADIUS * Math.sin(directionAngle * Math.PI / 180) * 2;
+        graphics.setColor(Color.CYAN);
+        graphics.drawLine(getLocation().getX(), getLocation().getY(), (int)x, (int)y);
+        graphics.dispose();
 
     }
 
@@ -84,6 +94,9 @@ public class Ship {
     public class Sonar {
 
     	public static final int MAX_LENGHT = 90;
+    	public static final int SENSOR_HALF_RAY = 15;
+    	
+    	
     	private int angle;
 
     	public Sonar(int angle){
@@ -91,23 +104,38 @@ public class Ship {
     	}
 
     	public Point getReflectionPoint(){
-			int direction = TrigUtils.concat(directionAngle, angle);
-			for (int i = 0; i < MAX_LENGHT; i++){
-				double x = location.getX() + i * Math.cos(direction * Math.PI / 180);
-		        double y = location.getY() + i * Math.sin(direction * Math.PI / 180);
-		        if (environement.getField((int)x, (int)y) == FieldType.WALL){
-		        	return new Point((int)x, (int)y);
-		        }
+			int angles[] = {
+					directionAngle - SENSOR_HALF_RAY,
+					directionAngle,
+					directionAngle + SENSOR_HALF_RAY
+			};
+			Map<Integer, Point> points = new TreeMap<>(); 
+			for (int k = 0; k < angles.length; k++){
+				int direction = TrigUtils.concat(angles[k], angle);
+				for (int i = 0; i < MAX_LENGHT; i++){
+					double x = location.getX() + i * Math.cos(direction * Math.PI / 180);
+			        double y = location.getY() + i * Math.sin(direction * Math.PI / 180);
+			        if (environement.getField((int)(x), (int)(y)) == FieldType.WALL){
+			        	Point p = new Point((int)x, (int)y);
+			        	points.put(TrigUtils.distance(getLocation(), p), p);
+			        	break;
+			        }
+				}
 			}
-			return null;
+			if (points.size() == 0){
+				return null;
+			} else {
+				Integer firstKey = points.keySet().iterator().next();
+				return points.get(firstKey);
+			}
+
     	}
 
-    	private Point getSensorPoint(int angle){
+		private Point getSensorPoint(int angle){
     		int direction = TrigUtils.concat(directionAngle, angle);
-			double x = location.getX() + RADIUS * Math.cos(direction * Math.PI / 180);
-	        double y = location.getY() + RADIUS * Math.sin(direction * Math.PI / 180);
+			double x = location.getX() + MAX_LENGHT * Math.cos(direction * Math.PI / 180);
+	        double y = location.getY() + MAX_LENGHT * Math.sin(direction * Math.PI / 180);
         	return new Point((int)x, (int)y);
-
     	}
 
 		public int getDistance() {
