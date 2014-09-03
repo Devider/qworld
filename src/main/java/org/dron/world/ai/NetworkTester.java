@@ -70,6 +70,7 @@ public class NetworkTester {
 		return result;
 	}
 
+	@SuppressWarnings("unused")
 	private final InterpreterStrategy WTAStrategy = new InterpreterStrategy() {
 
 		@Override

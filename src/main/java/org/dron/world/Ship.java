@@ -3,9 +3,6 @@ package org.dron.world;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -93,8 +90,8 @@ public class Ship {
 
     public class Sonar {
 
-    	public static final int MAX_LENGHT = 90;
-    	public static final int SENSOR_HALF_RAY = 15;
+    	public static final int MAX_LENGHT = 60;
+    	public static final int SENSOR_HALF_RAY_ANDLE = 15;
     	
     	
     	private int angle;
@@ -105,9 +102,9 @@ public class Ship {
 
     	public Point getReflectionPoint(){
 			int angles[] = {
-					directionAngle - SENSOR_HALF_RAY,
+					directionAngle - SENSOR_HALF_RAY_ANDLE,
 					directionAngle,
-					directionAngle + SENSOR_HALF_RAY
+					directionAngle + SENSOR_HALF_RAY_ANDLE
 			};
 			Map<Integer, Point> points = new TreeMap<>(); 
 			for (int k = 0; k < angles.length; k++){

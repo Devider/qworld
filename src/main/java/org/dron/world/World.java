@@ -23,7 +23,7 @@ public class World {
 		fields = new Field[width][height];
 		this.width = width;
 		this.height = height;
-		ship = new Ship(new Point(30, 60), -0, this);
+		ship = new Ship(new Point(590, 280), 180, this);
 	}
 
 	public static World load(String file){
