@@ -42,6 +42,7 @@ public class NetworkTester {
 				);
 
 		System.out.println(Arrays.toString(test));
+//		System.out.println(world.getShip().toString());
 		System.out.println(Arrays.toString(desision));
 
 		return interpretOutputs(desision);
@@ -77,23 +78,27 @@ public class NetworkTester {
 		public Movement interpret(double[] data) {
 			int index = getMaxIndex(data);
 			if (index == 0){
-				return new Movement(10, 0, 0);
+				return new Movement(1, 0, 0);
 			} else if (index == 1){
-				return new Movement(0, 0, 90 /* + error*/ );
+				return new Movement(0, 0, 5);
 			} else if (index == 2){
-				return new Movement(0, 0, -90 /* + error*/ );
+				return new Movement(0, 0, -5);
 			} else if (index == 3){
-				return new Movement(0, 10, 0);
+				return new Movement(0, 1, 0);
 			} else if (index == 4){
-				return new Movement(0, -10, 0);
+				return new Movement(0, -1, 0);
 			}
 			throw new RuntimeException("Somethimg wrong...");
 		}
 	};
 
 	private final InterpreterStrategy AdaptiveStrategy = new InterpreterStrategy() {
+
 		public Movement interpret(double[] data) {
-			return new Movement((int)(data[0] * 10), (int)(data[1] * 10), (int)(data[2] * 10));
+			Movement result = new Movement((int)(data[0] * 10), (int)(data[1] * 10), (int)(data[2] * 10));
+			if (Movement.ZERO.equals(result))
+				return WTAStrategy.interpret(data);
+			return result;
 		};
 	};
 }

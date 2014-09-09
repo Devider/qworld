@@ -18,7 +18,7 @@ public class Ship {
     private Sonar[] sonars;
     public static final int RADIUS = 10;
     private static int[] sonarsAngles =
-    	{-30, -60, -90, -120, 0, 30, 60, 90, 120};
+    	{-20, -60, -90, -120, 0, 20, 60, 90, 120};
 
     public Ship(Point point, Integer directionAngle, World environement) {
         this.location = point;
@@ -38,16 +38,16 @@ public class Ship {
         double x = pitch * Math.cos(directionAngle * Math.PI / 180);
         double y = pitch * Math.sin(directionAngle * Math.PI / 180);
 
-        location.setX((int)(location.getX() + x + .5));
-        location.setY((int)(location.getY() + y + .5));
+        location.setX(location.getX() + x);
+        location.setY(location.getY() + y);
     }
 
     public void doRoll(int roll) {
         double x = roll * Math.cos((directionAngle + 90) * Math.PI / 180);
         double y = roll * Math.sin((directionAngle + 90) * Math.PI / 180);
 
-        location.setX((int)(location.getX() + x + .5));
-        location.setY((int)(location.getY() + y + .5));
+        location.setX(location.getX() + x);
+        location.setY(location.getY() + y);
     }
 
     public void doYaw(int yaw) {
@@ -70,12 +70,12 @@ public class Ship {
 		}
         Graphics graphics = image.getGraphics();
         graphics.setColor(Color.BLUE);
-        graphics.fillOval(startPiont.getX(), startPiont.getY(), RADIUS*2, RADIUS*2);
+        graphics.fillOval(startPiont.getXAsInt(), startPiont.getYAsInt(), RADIUS*2, RADIUS*2);
         // нос
         double x = getLocation().getX() + RADIUS * Math.cos(directionAngle * Math.PI / 180) * 2;
         double y = getLocation().getY() + RADIUS * Math.sin(directionAngle * Math.PI / 180) * 2;
         graphics.setColor(Color.CYAN);
-        graphics.drawLine(getLocation().getX(), getLocation().getY(), (int)x, (int)y);
+        graphics.drawLine(getLocation().getXAsInt(), getLocation().getYAsInt(), (int)x, (int)y);
         graphics.dispose();
 
     }
@@ -88,12 +88,17 @@ public class Ship {
     	return sonarsAngles.length;
     }
 
+    @Override
+    public String toString() {
+    	return location.toString() + "  " + directionAngle;
+    }
+
     public class Sonar {
 
-    	public static final int MAX_LENGHT = 60;
+    	public static final int MAX_LENGHT = 70;
     	public static final int SENSOR_HALF_RAY_ANDLE = 15;
-    	
-    	
+
+
     	private int angle;
 
     	public Sonar(int angle){
@@ -106,7 +111,7 @@ public class Ship {
 					directionAngle,
 					directionAngle + SENSOR_HALF_RAY_ANDLE
 			};
-			Map<Integer, Point> points = new TreeMap<>(); 
+			Map<Integer, Point> points = new TreeMap<>();
 			for (int k = 0; k < angles.length; k++){
 				int direction = TrigUtils.concat(angles[k], angle);
 				for (int i = 0; i < MAX_LENGHT; i++){
@@ -152,13 +157,13 @@ public class Ship {
 			if (reflectionPoint == null){
 				Point sensorPoint = getSensorPoint(angle);
 				g.setColor(Color.PINK);
-				g.drawLine(location.getX(), location.getY(), sensorPoint.getX(), sensorPoint.getY());
+				g.drawLine(location.getXAsInt(), location.getYAsInt(), sensorPoint.getXAsInt(), sensorPoint.getYAsInt());
 			} else {
 				reflectionPoint = getReflectionPoint();
 				g.setColor(Color.BLACK);
-				g.drawLine(location.getX(), location.getY(), reflectionPoint.getX(), reflectionPoint.getY());
+				g.drawLine(location.getXAsInt(), location.getYAsInt(), reflectionPoint.getXAsInt(), reflectionPoint.getYAsInt());
 				g.setColor(Color.YELLOW);
-				g.fillOval(reflectionPoint.getX()-1, reflectionPoint.getY()-1, 3, 3);
+				g.fillOval(reflectionPoint.getXAsInt() - 1, reflectionPoint.getYAsInt() - 1, 3, 3);
 			}
 			g.dispose();
 		}

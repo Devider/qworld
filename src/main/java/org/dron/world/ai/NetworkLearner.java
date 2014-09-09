@@ -55,6 +55,7 @@ public class NetworkLearner extends Thread{
 		}
 
 		for (int i = 0; i < count; i++){
+			System.out.println(list.size());
 			int rand = randomizer.nextInt(list.size() - deep) + deep;
 			double[] teachData = concat(rand, deep, list);
 			student.teach(

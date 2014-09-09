@@ -72,7 +72,7 @@ public class World {
 			throw new IndexOutOfBoundsException(point.getX() + " > " + this.width);
 		if (point.getY() > this.height)
 			throw new IndexOutOfBoundsException(point.getY() + " > " + this.height);
-		fields[point.getX()][point.getY()] = field;
+		fields[point.getXAsInt()][point.getYAsInt()] = field;
 	}
 
 	public boolean isComplete() {
@@ -123,8 +123,8 @@ public class World {
         long rad2 = radius * radius;
         for (int x = 0; x < this.width; x++) {
             for (int y = 0; y < this.height; y++) {
-                long deltaX = point.getX() - x;
-                long deltaY = point.getY() - y;
+                double deltaX = point.getX() - x;
+                double deltaY = point.getY() - y;
                 if (rad2 >= deltaX*deltaX + deltaY*deltaY && fields[x][y].getType() == FieldType.WALL) {
                     return false;
                 }

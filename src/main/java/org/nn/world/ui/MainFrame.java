@@ -125,7 +125,7 @@ public class MainFrame extends JFrame implements MovementActionListener,TestStud
 	public void actionPerformed(TestStudentActionEvent e) {
 		BNetwork pilot = e.getStudent();
 		tester = new NetworkTester(world, pilot, WORLD_FILE);
-		timer = new Timer(300, new ActionListener() {
+		timer = new Timer(70, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
