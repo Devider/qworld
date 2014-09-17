@@ -94,10 +94,19 @@ public class NetworkTester {
 
 	private final InterpreterStrategy AdaptiveStrategy = new InterpreterStrategy() {
 
+		private int lastWTACount = 0;
+
 		public Movement interpret(double[] data) {
-			Movement result = new Movement((int)(data[0] * 10), (int)(data[1] * 10), (int)(data[2] * 10));
-			if (Movement.ZERO.equals(result))
+			Movement result = new Movement((int)(Math.abs(data[0]) * 10), (int)(data[1] * 10), (int)(data[2] * 10));
+			if (Movement.ZERO.equals(result)) {
+				if (lastWTACount > 3) {
+					lastWTACount = 0;
+					Movement mov = WTAStrategy.interpret(data);
+					return new Movement(mov.getForward() + 2, mov.getRoll(), mov.getYaw());
+				}
+				lastWTACount++;
 				return WTAStrategy.interpret(data);
+			}
 			return result;
 		};
 	};
