@@ -5,28 +5,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
-import javax.swing.table.AbstractTableModel;
 
 import org.dron.common.MathUtils;
 import org.dron.world.RowsData;
 
 public class MovesPanel extends JPanel implements MovesDataProvider{
 
-	private final List<RowsData> data = new LinkedList<RowsData>();
+	private List<RowsData> data = new LinkedList<RowsData>();
 
-	private final AbstractTableModel tm;
+	private MovesTableModel tm;
 
 	private static final long serialVersionUID = 9037068493345085487L;
 
@@ -41,9 +47,9 @@ public class MovesPanel extends JPanel implements MovesDataProvider{
 		add(spTable);
 		add(panel0);
 		JPanel panel1 = new JPanel();
-		JButton save = new JButton();
-		save.setText("Export");
-		save.addActionListener(new ActionListener() {
+		JButton export = new JButton();
+		export.setText("Export");
+		export.addActionListener(new ActionListener() {
 
 			private String format(double[] arr) {
 				StringBuilder result = new StringBuilder("{").append(arr[0]);
@@ -106,7 +112,72 @@ public class MovesPanel extends JPanel implements MovesDataProvider{
 				}
 			}
 		});
+		panel1.add(export);
+
+		JButton save = new JButton("Save");
+		save.addActionListener(new ActionListener() {
+
+			public void save(String filename) throws IOException{
+			    FileOutputStream fos = new FileOutputStream(filename);
+			    ObjectOutputStream oos = new ObjectOutputStream(fos);
+			    RowsData[] rows = new RowsData[data.size()];
+			    data.toArray(rows);
+			    oos.writeObject(rows);
+			    oos.flush();
+			    oos.close();
+			}
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new File("."));
+				int result = chooser.showSaveDialog(MovesPanel.this);
+				if (result != JFileChooser.APPROVE_OPTION){
+					return;
+				}
+				try {
+					save(chooser.getSelectedFile().getPath());
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(MovesPanel.this, "Ошибка при сохранении!\n" + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		});
+
 		panel1.add(save);
+
+		JButton load = new JButton("Load");
+		load.addActionListener(new ActionListener() {
+
+
+			public RowsData[] load(String filename) throws Exception{
+				FileInputStream fis = new FileInputStream(filename);
+				ObjectInputStream oin = new ObjectInputStream(fis);
+				RowsData[] obj = (RowsData[]) oin.readObject();
+				oin.close();
+				return obj;
+			}
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new File("."));
+				int result = chooser.showSaveDialog(MovesPanel.this);
+				if (result != JFileChooser.APPROVE_OPTION){
+					return;
+				}
+				try {
+					RowsData[] rows = load(chooser.getSelectedFile().getPath());
+					data = new ArrayList<RowsData>(Arrays.asList(rows));
+					tm.updateData(data);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+		panel1.add(load);
+
+
 		add(panel1);
 	}
 

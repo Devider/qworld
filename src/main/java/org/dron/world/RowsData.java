@@ -1,6 +1,8 @@
 package org.dron.world;
 
-public class RowsData{
+import java.io.Serializable;
+
+public class RowsData implements Serializable{
 
 	public static final int SENSORS_COLUMNS = Ship.getSonarCount();
 
@@ -8,17 +10,17 @@ public class RowsData{
 
 	public static final int COLUMNS_COUNT = SENSORS_COLUMNS + MOVES_COLUMNS;
 
-	private int[] sensors = new int[COLUMNS_COUNT];
+	private int[] values = new int[COLUMNS_COUNT];
 
 	public RowsData(int...vals){
 		if (vals.length != COLUMNS_COUNT)
 			throw new IllegalArgumentException("Wrong arguments count! Expected: " + COLUMNS_COUNT);
-		for (int i = 0; i < COLUMNS_COUNT; sensors[i] = vals[i++]);
+		for (int i = 0; i < COLUMNS_COUNT; values[i] = vals[i++]);
 	}
 
 	public int getAt(int index){
 		if (index >= COLUMNS_COUNT)
 			throw new IllegalArgumentException("Wrong argument!");
-		return sensors[index];
+		return values[index];
 	}
 }

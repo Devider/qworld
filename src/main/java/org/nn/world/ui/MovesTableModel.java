@@ -7,15 +7,20 @@ import javax.swing.table.AbstractTableModel;
 import org.dron.world.RowsData;
 
 public class MovesTableModel extends AbstractTableModel{
-	
+
 	private static final long serialVersionUID = 9119865887897076458L;
 
 	private List<RowsData> data;
-	
+
 	public MovesTableModel(List<RowsData> data){
 		this.data = data;
 	}
-	
+
+	public void updateData(List<RowsData> newData) {
+		this.data = newData;
+		fireTableDataChanged();
+	}
+
 	@Override
 	public int getRowCount() {
 		return data.size();
